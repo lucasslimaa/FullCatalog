@@ -6,8 +6,16 @@
 
   <ItemGroup>
     <Folder Include="Repository\" />
-    <Folder Include="Mappings\" />
-    <Folder Include="Context\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FullCatalog.Business\FullCatalog.Business.csproj" />
   </ItemGroup>
 
 </Project>
