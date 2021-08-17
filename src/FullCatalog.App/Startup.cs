@@ -1,5 +1,7 @@
 using FullCatalog.App.Data;
+using FullCatalog.Business.Interfaces;
 using FullCatalog.Data;
+using FullCatalog.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +36,16 @@ namespace FullCatalog.App
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddMvc();
+
+            services.AddScoped<CatalogDbContext>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
