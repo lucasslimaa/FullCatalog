@@ -1,0 +1,81 @@
+﻿@model FullCatalog.App.ViewModels.SupplierViewModel
+
+@{
+    ViewData["Title"] = "Edit Supplier";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+
+<form asp-action="Edit">
+
+    <vc:Summary></vc:Summary>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+            <label asp-for="DocumentNumber"></label>
+            <input asp-for="DocumentNumber" class="form-control" />
+            <span asp-validation-for="DocumentNumber" class="text-danger"></span>
+
+        </div>
+
+        <div class="form-group col-md-6">
+
+            <label asp-for="SupplierType"></label>
+            <div>
+                <input type="radio" value="1" asp-for="SupplierType" checked="@(Model.SupplierType == 1)" /> Natural Person
+                <input type="radio" value="2" asp-for="SupplierType" checked="@(Model.SupplierType == 2)" /> Legal Person
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div id="EnderecoTarget">
+    <partial name="_AddressDetails" />
+</div>
+
+<hr />
+<h4>Products</h4>
+<div>
+    <partial name="../Products/_ListProducts" model="@Model.Products" />
+</div>
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            AjaxModal();
+        });
+    </script>
+
+}

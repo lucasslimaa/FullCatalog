@@ -27,7 +27,6 @@ namespace FullCatalog.Data.Mappings
                  .HasColumnType("varchar(8)");
 
             builder.Property(p => p.ApartmentNumber)
-                .IsRequired()
                 .HasColumnType("varchar(200)");
 
             builder.Property(p => p.City)

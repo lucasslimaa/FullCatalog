@@ -7,7 +7,11 @@ namespace FullCatalog.Data
 {
     public class CatalogDbContext : DbContext
     {
-        public CatalogDbContext(DbContextOptions options)   : base(options) { }
+        public CatalogDbContext(DbContextOptions options)   : base(options) 
+        {
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.AutoDetectChangesEnabled = false;
+        }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }

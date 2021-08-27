@@ -25,6 +25,7 @@ namespace FullCatalog.Data.Repository
         }
         public async Task<IEnumerable<Product>> GetProductsBySupplier(Guid supplierId)
         {
+            var a = await Search(p => p.SupplierId == supplierId);
             return await Search(p => p.SupplierId == supplierId);
         }
     }
