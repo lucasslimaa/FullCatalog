@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace FullCatalog.App.Controllers
 {
+    [Route("product")]
     public class ProductsController : BaseController
     {
         private IWebHostEnvironment _hostEnvironment;
@@ -30,11 +31,13 @@ namespace FullCatalog.App.Controllers
         }
 
 
+        [Route("list")]
         public async Task<IActionResult> Index()
         {
             return View (_mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetProductsSuppliers()));
         }
 
+        [Route("details/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
             var productViewModel = await GetProduct(id);
@@ -44,12 +47,14 @@ namespace FullCatalog.App.Controllers
             return View(productViewModel);
         }
 
+        [Route("new")]
         public async Task<IActionResult> Create()
         {
             var ProductViewModel = await PopulateSupplier(new ProductViewModel());
             return View(ProductViewModel);
         }
 
+        [Route("new")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel productViewModel)
@@ -71,7 +76,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
-        [Route("edit-product/{id:guid}")]
+        [Route("edit/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var productViewModel = await GetProduct(id);
@@ -82,7 +87,7 @@ namespace FullCatalog.App.Controllers
         }
 
         [HttpPost]
-        [Route("edit-product/{id:guid}")]
+        [Route("edit/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id, ProductViewModel productViewModel)
         {
             if (id != productViewModel.Id) return NotFound();
@@ -115,6 +120,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var product = await GetProduct(id);
@@ -124,6 +130,7 @@ namespace FullCatalog.App.Controllers
             return View(product);
         }
 
+        [Route("delete/{id:guid}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)

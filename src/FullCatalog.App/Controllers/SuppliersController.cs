@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace FullCatalog.App.Controllers
 {
+    [Route("supplier")]
     public class SuppliersController : BaseController
     {
 
@@ -26,12 +27,13 @@ namespace FullCatalog.App.Controllers
             _mapper = mapper;
         }
 
-
+        [Route("list")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierRepository.GetAll()));
         }
 
+        [Route("info/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
             var supplierViewModel = await GetSupplierAddress(id);
@@ -44,11 +46,13 @@ namespace FullCatalog.App.Controllers
             return View(supplierViewModel);
         }
 
+        [Route("new")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Route("new")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SupplierViewModel supplierViewModel)
@@ -61,6 +65,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var supplierViewModel = await GetSupplierProductsAddress(id);
@@ -70,6 +75,7 @@ namespace FullCatalog.App.Controllers
             return View(supplierViewModel);
         }
 
+        [Route("edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, SupplierViewModel supplierViewModel)
@@ -84,6 +90,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var supplierViewModel = await GetSupplierAddress(id);
@@ -93,6 +100,7 @@ namespace FullCatalog.App.Controllers
             return View(supplierViewModel);
         }
 
+        [Route("delete/{id:guid}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
