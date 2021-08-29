@@ -2,6 +2,7 @@
 using FullCatalog.App.ViewModels;
 using FullCatalog.Business;
 using FullCatalog.Business.Interfaces;
+using FullCatalog.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,14 +17,15 @@ namespace FullCatalog.App.Controllers
     {
 
         private readonly ISupplierRepository _supplierRepository;
-        private readonly IAddressRepository _addressRepository;
+        private readonly ISupplierService _supplierService;
         private readonly IMapper _mapper;
 
         public SuppliersController(ISupplierRepository supplierRepository, IAddressRepository addressRepository,
-                                    IMapper mapper)
+                                    IMapper mapper, ISupplierService supplierService,
+                                    INotifier notifier) : base(notifier)
         {
             _supplierRepository = supplierRepository;
-            _addressRepository = addressRepository;
+            _supplierService = supplierService;
             _mapper = mapper;
         }
 
@@ -60,7 +62,10 @@ namespace FullCatalog.App.Controllers
             if (!ModelState.IsValid) return View(supplierViewModel);
 
             var supplier = _mapper.Map<Supplier>(supplierViewModel);
-            await _supplierRepository.Add(supplier);
+            await _supplierService.Add(supplier);
+
+            if (!OperationIsValid()) return View(supplierViewModel);
+
 
             return RedirectToAction("Index");
         }
@@ -85,7 +90,11 @@ namespace FullCatalog.App.Controllers
             if (!ModelState.IsValid) return View(supplierViewModel);
 
             var supplier = _mapper.Map<Supplier>(supplierViewModel);
-            await _supplierRepository.Update(supplier);
+
+            await _supplierService.Update(supplier);
+
+            if (!OperationIsValid()) return View(supplierViewModel);
+
 
             return RedirectToAction("Index");
         }
@@ -105,11 +114,13 @@ namespace FullCatalog.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var supplierViewModel = await GetSupplierAddress(id);
+            var supplier = await GetSupplierAddress(id);
 
-            if (supplierViewModel == null) return NotFound();
+            if (supplier == null) return NotFound();
 
-            await _supplierRepository.Remove(id);
+            await _supplierService.Delete(id);
+
+            if (!OperationIsValid()) return View(supplier);
 
             return RedirectToAction("Index");
         }
@@ -151,7 +162,9 @@ namespace FullCatalog.App.Controllers
 
             if (!ModelState.IsValid) return PartialView("_UpdateAddress", supplierViewModel);
 
-            await _addressRepository.Update(_mapper.Map<Address>(supplierViewModel.Address));
+            await _supplierService.UpdateAddress(_mapper.Map<Address>(supplierViewModel.Address));
+
+            if (!OperationIsValid()) return PartialView("_UpdateAddress", supplierViewModel);
 
             var url = Url.Action("GetAddress", "Suppliers", new { Id = supplierViewModel.Address.SupplierId });
 

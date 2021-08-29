@@ -2,6 +2,7 @@
 using FullCatalog.App.ViewModels;
 using FullCatalog.Business;
 using FullCatalog.Business.Interfaces;
+using FullCatalog.Business.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,17 @@ namespace FullCatalog.App.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
         private readonly ISupplierRepository _supplierRepository;
+        private readonly IProductService _productService;
 
-        public ProductsController(IProductRepository productRepository,
-                                  ISupplierRepository supplierRepository,
-                                  IMapper mapper, IWebHostEnvironment environment)
+        public ProductsController(IProductRepository productRepository,ISupplierRepository supplierRepository,
+                                  IMapper mapper, IWebHostEnvironment environment, IProductService productService, 
+                                  INotifier notifier) : base(notifier)
         {
             _productRepository = productRepository;
             _mapper = mapper;
             _supplierRepository = supplierRepository;
             _hostEnvironment = environment;
+            _productService = productService;
         }
 
 
@@ -71,7 +74,9 @@ namespace FullCatalog.App.Controllers
 
             productViewModel.Image = imgPrefix + productViewModel.ImageUpload.FileName;
 
-            await _productRepository.Add(_mapper.Map<Product>(productViewModel));
+            await _productService.Add(_mapper.Map<Product>(productViewModel));
+
+            if (!OperationIsValid()) return View(productViewModel);
 
             return RedirectToAction("Index");
         }
@@ -115,7 +120,9 @@ namespace FullCatalog.App.Controllers
             productRefresh.IsActive = productViewModel.IsActive;
 
             var product = _mapper.Map<Product>(productRefresh);
-            await _productRepository.Update(product);
+            await _productService.Update(product);
+
+            if (!OperationIsValid()) return View(productViewModel);
 
             return RedirectToAction("Index");
         }
@@ -139,8 +146,12 @@ namespace FullCatalog.App.Controllers
 
             if (product == null) return NotFound();
 
-            await _productRepository.Remove(id);
+            await _productService.Delete(id);
 
+            if (!OperationIsValid()) return View(product);
+
+            TempData["Success"] = "Product was successfully  deleted";
+                
             return RedirectToAction("Index");
         }
 

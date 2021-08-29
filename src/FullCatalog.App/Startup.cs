@@ -45,7 +45,7 @@ namespace FullCatalog.App
 
             services.AddMvcConfiguration();
 
-            services.ResolveDependencies();
+            services.ResolveDependencies();     
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
