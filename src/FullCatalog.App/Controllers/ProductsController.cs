@@ -66,7 +66,6 @@ namespace FullCatalog.App.Controllers
         [ClaimsAuthorize("Product", "Add")]
         [Route("new")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel productViewModel)
         {
             productViewModel = await PopulateSupplier(productViewModel);
@@ -150,7 +149,6 @@ namespace FullCatalog.App.Controllers
         [Route("delete/{id:guid}")]
         [ClaimsAuthorize("Product", "Delete")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var product = await GetProduct(id);

@@ -14,8 +14,6 @@ namespace FullCatalog.App.Extensions
     {
         public static bool ValidateUserClaims(HttpContext context, string claimName, string claimValue)
         {
-            if (context == null) return false;
-
             return context.User.Identity.IsAuthenticated &&
                    context.User.Claims.Any(c => c.Type == claimName && c.Value.Contains(claimValue));
         }

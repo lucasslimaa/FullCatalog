@@ -11,13 +11,6 @@ namespace FullCatalog.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -28,10 +21,35 @@ namespace FullCatalog.App.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("erro/{id:length(3,3)}")]
+        public IActionResult Errors(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var modelErro = new ErrorViewModel();
+
+            if (id == 500)
+            {
+                modelErro.Message = "An error has occured! Try again later.";
+                modelErro.Title = "An error has occured!";
+                modelErro.ErrorCode = id;
+            }
+            else if (id == 404)
+            {
+                modelErro.Message = "This page does not exist!";
+                modelErro.Title = "Ops....! Page not found :( .";
+                modelErro.ErrorCode = id;
+            }
+            else if (id == 403)
+            {
+                modelErro.Message = "Access denied to this action.";
+                modelErro.Title = "Access denied";
+                modelErro.ErrorCode = id;
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+            return View("Error", modelErro);
         }
     }
 }

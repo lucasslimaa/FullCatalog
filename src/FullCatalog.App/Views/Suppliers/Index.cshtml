@@ -29,24 +29,24 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-            @this.FormatDocumentNumber(item.SupplierType, item.DocumentNumber)
-        </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td class="text-right">
-                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-search"></spam></a>
-                <a class="btn btn-warning" supress-by-claim-name="Supplier" supress-by-claim-value="Edit" asp-action="Edit" asp-route-id="@item.Id">
-                    <spam class="fa fa-pencil-alt"></spam>
-                </a>
-                <a class="btn btn-danger" supress-by-claim-name="Supplier" supress-by-claim-value="Delete" asp-action="Delete" asp-route-id="@item.Id"><spam class="fa fa-trash"></spam></a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @this.FormatDocumentNumber(item.SupplierType, item.DocumentNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td class="text-right">
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-search"></spam></a>
+                    <a class="btn btn-warning" supress-by-claim-name="Supplier" supress-by-claim-value="Edit" asp-action="Edit" asp-route-id="@item.Id">
+                        <spam class="fa fa-pencil-alt"></spam>
+                    </a>
+                    <a class="btn btn-danger" supress-by-claim-name="Supplier" supress-by-claim-value="Delete" asp-action="Delete" asp-route-id="@item.Id"><spam class="fa fa-trash"></spam></a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

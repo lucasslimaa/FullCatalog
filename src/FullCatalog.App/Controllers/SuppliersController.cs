@@ -4,6 +4,7 @@ using FullCatalog.App.ViewModels;
 using FullCatalog.Business;
 using FullCatalog.Business.Interfaces;
 using FullCatalog.Business.Services;
+using KissLog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -21,20 +22,22 @@ namespace FullCatalog.App.Controllers
         private readonly ISupplierRepository _supplierRepository;
         private readonly ISupplierService _supplierService;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         public SuppliersController(ISupplierRepository supplierRepository, IAddressRepository addressRepository,
                                     IMapper mapper, ISupplierService supplierService,
-                                    INotifier notifier) : base(notifier)
+                                    INotifier notifier, ILogger logger) : base(notifier)
         {
             _supplierRepository = supplierRepository;
             _supplierService = supplierService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [AllowAnonymous]
         [Route("list")]
         public async Task<IActionResult> Index()
-        {
+        {            
             return View(_mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierRepository.GetAll()));
         }
 
@@ -62,7 +65,6 @@ namespace FullCatalog.App.Controllers
         [ClaimsAuthorize("Supplier", "Add")]
         [Route("new")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SupplierViewModel supplierViewModel)
         {
             if (!ModelState.IsValid) return View(supplierViewModel);
@@ -90,7 +92,6 @@ namespace FullCatalog.App.Controllers
         [ClaimsAuthorize("Supplier", "Edit")]
         [Route("edit")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, SupplierViewModel supplierViewModel)
         {
             if (id != supplierViewModel.Id) return NotFound();
@@ -121,7 +122,6 @@ namespace FullCatalog.App.Controllers
         [ClaimsAuthorize("Supplier", "Delete")]
         [Route("delete/{id:guid}")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var supplier = await GetSupplierAddress(id);
@@ -164,7 +164,6 @@ namespace FullCatalog.App.Controllers
 
         [HttpPost]
         [Route("update-supplier-address/{id:guid}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAddress(SupplierViewModel supplierViewModel)
         {
             ModelState.Remove("DocumentNumber");

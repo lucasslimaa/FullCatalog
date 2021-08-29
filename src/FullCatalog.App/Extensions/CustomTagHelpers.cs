@@ -34,7 +34,7 @@ namespace FullCatalog.App.Extensions
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var hasAccess = CustomAuthorization.ValidateUserClaims(null, IdentityClaimName, IdentityClaimValue);
+            var hasAccess = CustomAuthorization.ValidateUserClaims(_httpContextAccessor.HttpContext, IdentityClaimName, IdentityClaimValue);
 
             if (hasAccess) return;
 
