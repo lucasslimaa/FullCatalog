@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using FullCatalog.App.Extensions;
 using FullCatalog.App.ViewModels;
 using FullCatalog.Business;
 using FullCatalog.Business.Interfaces;
 using FullCatalog.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,7 @@ using System.Threading.Tasks;
 namespace FullCatalog.App.Controllers
 {
     [Route("product")]
+    [Authorize]
     public class ProductsController : BaseController
     {
         private IWebHostEnvironment _hostEnvironment;
@@ -34,12 +37,14 @@ namespace FullCatalog.App.Controllers
         }
 
 
+        [AllowAnonymous]
         [Route("list")]
         public async Task<IActionResult> Index()
         {
             return View (_mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetProductsSuppliers()));
         }
 
+        [AllowAnonymous]
         [Route("details/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -50,6 +55,7 @@ namespace FullCatalog.App.Controllers
             return View(productViewModel);
         }
 
+        [ClaimsAuthorize("Product","Add")]
         [Route("new")]
         public async Task<IActionResult> Create()
         {
@@ -57,6 +63,7 @@ namespace FullCatalog.App.Controllers
             return View(ProductViewModel);
         }
 
+        [ClaimsAuthorize("Product", "Add")]
         [Route("new")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -81,6 +88,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Product", "Edit")]
         [Route("edit/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -92,6 +100,7 @@ namespace FullCatalog.App.Controllers
         }
 
         [HttpPost]
+        [ClaimsAuthorize("Product", "Edit")]
         [Route("edit/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id, ProductViewModel productViewModel)
         {
@@ -127,6 +136,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Product", "Delete")]
         [Route("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -138,6 +148,7 @@ namespace FullCatalog.App.Controllers
         }
 
         [Route("delete/{id:guid}")]
+        [ClaimsAuthorize("Product", "Delete")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)

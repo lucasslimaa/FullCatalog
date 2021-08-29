@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FullCatalog.App.Extensions;
 using FullCatalog.App.ViewModels;
 using FullCatalog.Business;
 using FullCatalog.Business.Interfaces;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 namespace FullCatalog.App.Controllers
 {
     [Route("supplier")]
+    [Authorize]
     public class SuppliersController : BaseController
     {
 
@@ -29,12 +31,14 @@ namespace FullCatalog.App.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [Route("list")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierRepository.GetAll()));
         }
 
+        [AllowAnonymous]
         [Route("info/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -48,12 +52,14 @@ namespace FullCatalog.App.Controllers
             return View(supplierViewModel);
         }
 
+        [ClaimsAuthorize("Supplier", "Add")]
         [Route("new")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [ClaimsAuthorize("Supplier", "Add")]
         [Route("new")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,6 +76,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Supplier", "Edit")]
         [Route("edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -80,6 +87,7 @@ namespace FullCatalog.App.Controllers
             return View(supplierViewModel);
         }
 
+        [ClaimsAuthorize("Supplier", "Edit")]
         [Route("edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -99,6 +107,7 @@ namespace FullCatalog.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Supplier", "Delete")]
         [Route("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -109,6 +118,7 @@ namespace FullCatalog.App.Controllers
             return View(supplierViewModel);
         }
 
+        [ClaimsAuthorize("Supplier", "Delete")]
         [Route("delete/{id:guid}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
