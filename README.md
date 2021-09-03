@@ -16,7 +16,7 @@ Packages used in the project
 
 ## 📌 Release
 
-You can access the running application https://fullcatalogapp.azurewebsites.net/
+You can access the running application here > https://fullcatalogapp.azurewebsites.net/
 
 ## ✒️ Author
 
