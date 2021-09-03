@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using KissLog.AspNetCore;
 using KissLog.CloudListeners.Auth;
 using KissLog.CloudListeners.RequestLogsListener;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Diagnostics;
 using System.Text;
-using KissLog.AspNetCore;
 
 namespace FullCatalog.App.Configurations
 {

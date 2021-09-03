@@ -13,9 +13,9 @@ namespace FullCatalog.Business.Models.Validations
 
             When(s => s.SupplierType == SupplierType.NaturalPerson, () =>
             {
-                RuleFor(s => s.DocumentNumber.Length).Equal(CpfValidacao.CpfLength)
+                RuleFor(s => s.DocumentNumber.Length).Equal(CpfValidation.CpfLength)
                     .WithMessage("The field Document Number must have between {ComparasionValue}, but received {PropertyValue}.");
-                RuleFor(s => CpfValidacao.Validate(s.DocumentNumber)).Equal(true)
+                RuleFor(s => CpfValidation.Validate(s.DocumentNumber)).Equal(true)
                     .WithMessage("The document number is not valid!");
 
             });

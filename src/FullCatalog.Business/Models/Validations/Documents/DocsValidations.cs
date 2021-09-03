@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace FullCatalog.Business.Models.Validations.Documents
 {
-    public class CpfValidacao
+    public class CpfValidation
     {
         public const int CpfLength = 11;
 

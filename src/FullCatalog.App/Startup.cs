@@ -13,21 +13,9 @@ namespace FullCatalog.App
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public Startup(IWebHostEnvironment hostEnviroment)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(hostEnviroment.ContentRootPath)
-                .AddJsonFile(path: "appsettings.json", true, true)
-                .AddJsonFile(path: $"appsettings.{hostEnviroment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables();
-
-            if (hostEnviroment.IsProduction())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
-
-            Configuration = builder.Build();
-
+        public Startup(IConfiguration configuration)
+        {           
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)

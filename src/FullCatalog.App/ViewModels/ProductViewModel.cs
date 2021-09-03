@@ -34,7 +34,8 @@ namespace FullCatalog.App.ViewModels
         public decimal Value { get; set; }
 
         [ScaffoldColumn(false)]
-        public DateTime CreateDateTime { get; set; }
+        [DisplayName("Creation date")]
+        public DateTime CreatedAt { get; set; }
 
         [DisplayName("IsActive?")]
         public bool IsActive { get; set; }
